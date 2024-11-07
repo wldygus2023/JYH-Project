@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 목록</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">메인</a>
+        <a href="create.html">생성</a>
+        <a href="read.html">읽기</a>
+        <a href="update.html">수정</a>
+        <a href="delete.html">삭제</a>
+    </div>
+
+    <section>
+        <h1>사용자 목록</h1>
+        <ul id="userList"></ul>
+    </section>
+
+    <script>
+        async function fetchUsers() {
+            const response = await fetch('http://localhost:3000/users');
+            const users = await response.json();
+            const userList = document.getElementById('userList');
+
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `ID: ${user._id}, 이름: ${user.name}, 이메일: ${user.email}, 나이: ${user.age}`;
+                userList.appendChild(li);
+            });
+        }
+
+        window.onload = fetchUsers;
+    </script>
+</body>
+</html>

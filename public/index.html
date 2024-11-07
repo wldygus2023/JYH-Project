@@ -3,50 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>사용자 추가 및 수정</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>사용자 추가</h1>
-    <form id="userForm">
-        <label for="name">이름:</label>
-        <input type="text" id="name" name="name" required><br>
-
-        <label for="email">이메일:</label>
-        <input type="email" id="email" name="email" required><br>
-
-        <label for="age">나이:</label>
-        <input type="number" id="age" name="age" required><br>
-
-        <button type="submit">추가하기</button>
-    </form>
-
-    <div id="userIdDisplay" style="display:none;">
-        <h2>생성된 사용자 ID:</h2>
-        <p id="createdUserId"></p>
+    <div class="nav">
+        <a href="index.html">메인</a>
+        <a href="create.html">생성</a>
+        <a href="read.html">읽기</a>
+        <a href="update.html">수정</a>
+        <a href="delete.html">삭제</a>
     </div>
 
-    <h1>사용자 수정</h1>
-    <form id="updateForm">
-        <label for="userId">사용자 ID:</label>
-        <input type="text" id="userId" name="userId" required><br>
+    <!-- 사용자 추가 -->
+    <section>
+        <h1>사용자 추가</h1>
+        <form id="userForm">
+            <label for="name">이름:</label>
+            <input type="text" id="name" name="name" required><br>
 
-        <label for="updateName">이름:</label>
-        <input type="text" id="updateName" name="updateName" required><br>
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required><br>
 
-        <label for="updateEmail">이메일:</label>
-        <input type="email" id="updateEmail" name="updateEmail" required><br>
+            <label for="age">나이:</label>
+            <input type="number" id="age" name="age" required><br>
 
-        <label for="updateAge">나이:</label>
-        <input type="number" id="updateAge" name="updateAge" required><br>
+            <button type="submit">추가하기</button>
+        </form>
 
-        <button type="submit">수정하기</button>
-    </form>
+        <div id="userIdDisplay" style="display:none;">
+            <h2>생성된 사용자 ID:</h2>
+            <p id="createdUserId"></p>
+        </div>
+    </section>
 
-    <h1>사용자 삭제</h1>
-    <form id="deleteForm">
-        <label for="deleteId">삭제할 사용자 ID:</label>
-        <input type="text" id="deleteId" name="deleteId" required><br>
-        <button type="submit">삭제하기</button>
-    </form>
+    <!-- 사용자 수정 -->
+    <section>
+        <h1>사용자 수정</h1>
+        <form id="updateForm">
+            <label for="userId">사용자 ID:</label>
+            <input type="text" id="userId" name="userId" required><br>
+
+            <label for="updateName">이름:</label>
+            <input type="text" id="updateName" name="updateName" required><br>
+
+            <label for="updateEmail">이메일:</label>
+            <input type="email" id="updateEmail" name="updateEmail" required><br>
+
+            <label for="updateAge">나이:</label>
+            <input type="number" id="updateAge" name="updateAge" required><br>
+
+            <button type="submit">수정하기</button>
+        </form>
+    </section>
+
+    <!-- 사용자 삭제 -->
+    <section>
+        <h1>사용자 삭제</h1>
+        <form id="deleteForm">
+            <label for="deleteId">삭제할 사용자 ID:</label>
+            <input type="text" id="deleteId" name="deleteId" required><br>
+            <button type="submit">삭제하기</button>
+        </form>
+    </section>
+
+    <!-- 사용자 목록 -->
+    <section>
+        <h1>사용자 목록</h1>
+        <ul id="userList"></ul>
+    </section>
 
     <script>
         // 사용자 추가
@@ -58,18 +82,17 @@
 
             const response = await fetch('http://localhost:3000/users', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, age }),
             });
 
             const data = await response.json();
             console.log(data);
-            
+
             // 사용자 ID 표시
-            document.getElementById('createdUserId').innerText = data._id; // 생성된 사용자 ID
-            document.getElementById('userIdDisplay').style.display = 'block'; // ID 표시
+            document.getElementById('createdUserId').innerText = data._id;
+            document.getElementById('userIdDisplay').style.display = 'block';
+            fetchUsers(); // 목록 갱신
         };
 
         // 사용자 수정
@@ -82,14 +105,13 @@
 
             const response = await fetch(`http://localhost:3000/users/${userId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, age }),
             });
 
             const data = await response.json();
             console.log(data);
+            fetchUsers(); // 목록 갱신
         };
 
         // 사용자 삭제
@@ -103,29 +125,25 @@
 
             const data = await response.text();
             console.log(data);
+            fetchUsers(); // 목록 갱신
         };
+
+        // 사용자 목록 조회
+        async function fetchUsers() {
+            const response = await fetch('http://localhost:3000/users');
+            const users = await response.json();
+            const userList = document.getElementById('userList');
+
+            userList.innerHTML = ''; // 기존 목록 초기화
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `ID: ${user._id}, 이름: ${user.name}, 이메일: ${user.email}, 나이: ${user.age}`;
+                userList.appendChild(li);
+            });
+        }
+
+        // 페이지 로드 시 사용자 목록 조회
+        window.onload = fetchUsers;
     </script>
-      <h1>사용자 목록</h1>
-      <ul id="userList"></ul>
-  
-      <script>
-          // 사용자 목록 조회
-          async function fetchUsers() {
-              const response = await fetch('http://localhost:3000/users');
-              const users = await response.json();
-              const userList = document.getElementById('userList');
-  
-              // 사용자 목록을 HTML에 추가
-              userList.innerHTML = ''; // 기존 목록 초기화
-              users.forEach(user => {
-                  const li = document.createElement('li');
-                  li.textContent = `ID: ${user._id}, 이름: ${user.name}, 이메일: ${user.email}, 나이: ${user.age}`;
-                  userList.appendChild(li);
-              });
-          }
-  
-          // 페이지 로드 시 사용자 목록 조회
-          window.onload = fetchUsers;
-      </script>
 </body>
 </html>
