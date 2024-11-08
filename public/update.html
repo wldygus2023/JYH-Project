@@ -5,7 +5,32 @@
     <title>사용자 수정</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body>  <header id="header">
+    <a href="/" class="logo"><img src="./img/logo_landing.svg"></a>
+
+    <nav>
+        <ul>
+            <!-- <li><a href="#dashboard">대시보드</a></li> -->
+            <!-- <li><a href="#notice">공지사항</a></li> -->
+            <!-- <li><a href="#guide">사용가이드</a></li> -->
+            <!-- <li><a href="#signup">회원가입</a></li> -->
+            <li><a href="#login" class="login-button">로그인</a></li>
+        </ul>
+    </nav>
+</header>
+
+<script>
+    // JavaScript로 opacity 조절
+    const header = document.getElementById("header");
+
+    header.addEventListener("mouseover", () => {
+        header.style.opacity = "0.9"; // 마우스 오버 시 약간 투명하게
+    });
+
+    header.addEventListener("mouseout", () => {
+        header.style.opacity = "1"; // 기본 상태로 복원
+    });
+</script>
     <div class="nav">
         <a href="index.html">메인</a>
         <a href="create.html">생성</a>

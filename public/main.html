@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Storage Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #wordList {
+            margin-top: 20px;
+            width: 300px;
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Word Storage Program</h2>
+    <input type="text" id="spelling" placeholder="Enter spelling">
+    <input type="text" id="meaning" placeholder="Enter meaning">
+    <input type="text" id="pronunciation" placeholder="Enter pronunciation">
+    <button onclick="saveWord()">Save Word</button>
+
+    <div id="wordList"></div>
+
+    <script>
+        // 저장된 단어를 로드하는 함수
+        function loadWords() {
+            let words = JSON.parse(localStorage.getItem("words")) || [];
+            displayWords(words);
+        }
+
+        // 단어 저장 함수
+        function saveWord() {
+            let spelling = document.getElementById("spelling").value.trim();
+            let meaning = document.getElementById("meaning").value.trim();
+            let pronunciation = document.getElementById("pronunciation").value.trim();
+
+            if (spelling && meaning && pronunciation) {
+                let words = JSON.parse(localStorage.getItem("words")) || [];
+                words.push({ spelling, meaning, pronunciation });
+                localStorage.setItem("words", JSON.stringify(words));
+
+                displayWords(words);
+                document.getElementById("spelling").value = "";
+                document.getElementById("meaning").value = "";
+                document.getElementById("pronunciation").value = "";
+            } else {
+                alert("Please enter spelling, meaning, and pronunciation.");
+            }
+        }
+
+        // 저장된 단어 목록을 화면에 표시하는 함수
+        function displayWords(words) {
+            let wordList = document.getElementById("wordList");
+            wordList.innerHTML = "<h3>Saved Words</h3>";
+            words.forEach(item => {
+                wordList.innerHTML += `<p><strong>${item.spelling}</strong> - ${item.meaning}, [${item.pronunciation}]</p>`;
+            });
+        }
+
+        // 초기 로드 시 저장된 단어 불러오기
+        loadWords();
+    </script>
+
+</body>
+</html>

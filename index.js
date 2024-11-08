@@ -6,12 +6,9 @@ const app = express();
 const PORT = 3000;
 
 // MongoDB 연결
-mongoose.connect('mongodb+srv://wldygus2023:Wldkfka!23@cluster0.f2jfx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB에 성공적으로 연결되었습니다."))
-.catch(err => console.error("MongoDB 연결 오류:", err));
+mongoose.connect('mongodb+srv://wldygus2023:Wldkfka!23@cluster0.f2jfx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+  .then(() => console.log('MongoDB에 성공적으로 연결되었습니다.'))
+  .catch((err) => console.error('MongoDB 연결 실패:', err));
 
 // JSON 형식의 데이터를 받을 수 있게 설정
 app.use(express.json());
@@ -41,12 +38,6 @@ app.get('/users', async (req, res) => {
     }
 });
 
-// 서버 시작
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-
 // 사용자 업데이트 API (PUT)
 app.put('/users/:id', async (req, res) => {
     const { id } = req.params; // URL 파라미터에서 사용자 ID 가져오기
@@ -62,7 +53,6 @@ app.put('/users/:id', async (req, res) => {
     }
 });
 
-
 // 사용자 삭제 API (DELETE)
 app.delete('/users/:id', async (req, res) => {
     const { id } = req.params; // URL 파라미터에서 사용자 ID 가져오기
@@ -77,13 +67,9 @@ app.delete('/users/:id', async (req, res) => {
     }
 });
 
-// 전체 사용자 조회 API (GET)
-app.get('/users', async (req, res) => {
-    try {
-        const users = await User.find(); // 모든 사용자 정보 조회
-        res.status(200).send(users); // 사용자 목록 반환
-    } catch (error) {
-        res.status(500).send(error); // 오류 발생 시 500 상태 코드 반환
-    }
-});
+// 서버 시작
 
+app.listen(3000, '0.0.0.0', () => {
+    console.log('Server is running on port 3000');
+  });
+  
