@@ -6,10 +6,14 @@ const app = express();
 const PORT = 3000;
 
 // MongoDB 연결
-mongoose.connect('mongodb+srv://wldygus2023:Wldkfka!23@cluster0.f2jfx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-  .then(() => console.log('MongoDB에 성공적으로 연결되었습니다.'))
-  .catch((err) => console.error('MongoDB 연결 실패:', err));
-
+mongoose.connect('mongodb://wldygus2023:Wldkfka!23@cluster0-shard-00-01.f2jfx.mongodb.net:27017,cluster0-shard-00-02.f2jfx.mongodb.net:27017,cluster0-shard-00-00.f2jfx.mongodb.net:27017/?ssl=true&retryWrites=true&w=majority&appName=Cluster0&authSource=admin&replicaSet=atlas-3ho5m7-shard-0', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,  // 필요시 추가 가능
+    useFindAndModify: false // 필요시 추가 가능
+  })
+  .then(() => console.log('MongoDB 연결 성공'))
+  .catch(err => console.error('MongoDB 연결 실패:', err));
 // JSON 형식의 데이터를 받을 수 있게 설정
 app.use(express.json());
 
